@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-16"?>
 <Configuration>
 	<ViewDefinitions>
-        <!-- PowershellUtilities.Jobs -->
+        <!-- PSUtilities.Jobs -->
         <View>
-            <Name>PowershellUtilities.Jobs</Name>
+            <Name>PSUtilities.Jobs</Name>
             <ViewSelectedBy>
-                <TypeName>PowershellUtilities.Jobs</TypeName>
+                <TypeName>PSUtilities.Jobs</TypeName>
             </ViewSelectedBy>
             <TableControl>
                 <AutoSize/>
