@@ -12,7 +12,8 @@ Start-Job -Name MyBgJob -ScriptBlock $LocalSb
 
 Invoke-Command -Session $LocalSes -ScriptBlock { Get-Date } -AsJob # Local
 Workflow HelloWorld { "Hello World" }; HelloWorld -AsJob
-cls
+$jobs = gjt
+Clear-Host
 
 # Demo - Object types
 # TypeName:	System.Diagnostics.Process
@@ -24,9 +25,13 @@ $process.PSStandardMembers.DefaultDisplayPropertySet.ReferencedPropertyNames
 
 # Demo - Pipeline
 $FormatEnumerationLimit
+$jobs[1].data | Select-Object -First 5 Name, AddressListMembership | Format-Table
+$FormatEnumerationLimit = 15
+$jobs[1].data | Select-Object -First 5 Name, AddressListMembership | Format-Table
+$FormatEnumerationLimit = 4
 
 # Demo - $PSHome = C:\Windows\System32\WindowsPowerShell\v1.0
-cls
+Clear-Host
 Get-ChildItem $PSHome/*format*.ps1xml
 Get-ChildItem $PSHome/*type*.ps1xml
 
@@ -35,7 +40,7 @@ Notepad $PSHome/dotnettypes.format.ps1xml
 Notepad $PSHome/types.ps1xml
 
 # Demo - Custom object creation
-cls
+Clear-Host
 $myCustomObject = [PSCustomObject]@{
     FirstName = 'Dave'
     LastName = 'Goldman'
@@ -46,14 +51,14 @@ $myCustomObject = [PSCustomObject]@{
     Job = 'Engineer'
     Company = 'Big Software Company'}
 
-cls
+Clear-Host
 $myCustomObject | Get-Member
 $myCustomObject | Get-Member -Force
 $myCustomObject.pstypenames
 
 #Demo - Ways to exttend object with PSTypeNames
 #Method 1 - Create your [PSCustomObject] with PSTypeName = 'Some Object'
-$myCustomObject = [PSCustomObject]@{
+$myCustomObject1 = [PSCustomObject]@{
     PSTypeName = 'myCustomObject'
     Key = 'Value'}
 
@@ -70,12 +75,13 @@ $myCustomObject
 $myCustomObject.pstypenames
 
 # Update the property sets to reflect the changes - We will extended the DefaultDisplayProperties
-cls
-Update-TypeData -TypeName MyCustomObject -DefaultDisplayPropertySet Name, Company -DefaultDisplayProperty Name -DefaultKeyPropertySet CustomProperties -Force
+Clear-Host
+Update-TypeData -TypeName MyCustomObject -DefaultDisplayPropertySet Name, Company -DefaultDisplayProperty`
+Name -DefaultKeyPropertySet CustomProperties -Force
 $myCustomObject
-$myCustomObject | gm -Force
+$myCustomObject | Get-Member -Force
 
-cls
+Clear-Host
 "First Name: {0}`nLast Name: {1}`nDate: {2}`nTime: {3}`nCity: {4}`nState: {5}`nJob: {6}`nCompany: {7}" -f $myCustomObject.FirstName,
 $myCustomObject.LastName, $myCustomObject.Date, $myCustomObject.Time, $myCustomObject.City,
 $myCustomObject.State, $myCustomObject.Job, $myCustomObject.Company
@@ -93,5 +99,14 @@ Get-TypeData -TypeName *job*
 Get-FormatData -TypeName System.Management.Automation.Job | Export-FormatData -Path c:\temp\jobsxml.ps1xml
 Format-XmlDocument -Path C:\temp\jobsxml.ps1xml | clip | Notepad
 
-cls
+Clear-Host
 Get-Job
+Get-JobTypes
+
+Clear-Host
+Get-PSSession
+Get-Sessions
+$ses0 = Get-PSSession -id 1
+$ses0 | Format-List
+$ses1 = Get-Sessions
+$ses1[0] | Format-List
