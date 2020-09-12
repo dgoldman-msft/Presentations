@@ -76,8 +76,7 @@ $myCustomObject.pstypenames
 
 # Update the property sets to reflect the changes - We will extended the DefaultDisplayProperties
 Clear-Host
-Update-TypeData -TypeName MyCustomObject -DefaultDisplayPropertySet Name, Company -DefaultDisplayProperty`
-Name -DefaultKeyPropertySet CustomProperties -Force
+Update-TypeData -TypeName MyCustomObject -DefaultDisplayPropertySet Name, Company -DefaultDisplayProperty Name -DefaultKeyPropertySet CustomProperties -Force
 $myCustomObject
 $myCustomObject | Get-Member -Force
 
