@@ -48,7 +48,7 @@
 
 	# Functions to export from this module
 	FunctionsToExport = @(
-		'Get-Sessions'
+		'Get-SessionType'
 		'Get-JobTypes'
 		'Get-ModulePath')
 

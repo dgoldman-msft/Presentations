@@ -84,7 +84,8 @@ $myCustomObject.pstypenames
 $myCustomObject3 = [PSCustomObject]@{
     Key        = 'Value'
 }
-$myCustomObject3.pstypenames.Insert(0, "myCustomObject3")
+$myCustomObject3.pstypenames.Insert(0, "myCustomObject33")
+
 
 # NOTE: Add the type: Remove the type: $myCustomobject.pstypenames.Remove('myCustomObject')
 #region ExtendTypes
@@ -116,6 +117,7 @@ Get-TypeData -TypeName *job*
 Get-FormatData -TypeName System.Management.Automation.Job | Export-FormatData -Path c:\temp\jobsxml.ps1xml
 Format-XmlDocument -Path C:\temp\jobsxml.ps1xml | clip | Notepad
 
+# Demo module formats - how it all works
 Clear-Host
 Get-Job
 Get-JobType
