@@ -1,7 +1,7 @@
 ﻿return
 
-# Setup
-3 | Start-connections
+#region Setup
+3 | Start-connection
 $ExoSes = Get-PSSession
 $ExoSb = { Get-Mailbox }
 Invoke-Command -Session $ExoSes -ScriptBlock $Exosb -AsJob # Exchange
@@ -14,21 +14,32 @@ Invoke-Command -Session $LocalSes -ScriptBlock { Get-Date } -AsJob # Local
 Workflow HelloWorld { "Hello World" }; HelloWorld -AsJob
 $jobs = gjt
 Clear-Host
+#endregion Setup
 
-# Demo - Object types
+#region Demo - Object types
 # TypeName:	System.Diagnostics.Process
-Get-Process | Get-Member -Force
-Get-Process | Select-Object -First 5
-
+(Get-Process | Get-Member).count
+(Get-Process | Get-Member -force).count
+(Get-Process | Get-Member -static).count
 $process = Get-Process | Select-Object -First 1
-$process.PSStandardMembers.DefaultDisplayPropertySet.ReferencedPropertyNames
 
-# Demo - Pipeline
+# Object Hierarchy
+$process.pstypenames
+
+# The magic sauce!!
+# https://devblogs.microsoft.com/powershell/psstandardmembers-the-stealth-property/
+Get-Process | Get-Member -Force | where-object Name -like "ps*" 
+$process.PSStandardMembers.DefaultDisplayPropertySet.ReferencedPropertyNames
+$process
+#endregion Demo
+
+#region FormatEnumerationLimit - List value expansion
 $FormatEnumerationLimit
 $jobs[1].data | Select-Object -First 5 Name, AddressListMembership | Format-Table
 $FormatEnumerationLimit = 15
 $jobs[1].data | Select-Object -First 5 Name, AddressListMembership | Format-Table
 $FormatEnumerationLimit = 4
+#endregion FormatEnumerationLimit
 
 # Demo - $PSHome = C:\Windows\System32\WindowsPowerShell\v1.0
 Clear-Host
@@ -39,73 +50,80 @@ Get-ChildItem $PSHome/*type*.ps1xml
 Notepad $PSHome/dotnettypes.format.ps1xml
 Notepad $PSHome/types.ps1xml
 
-# Demo - Custom object creation
+# Demo - Custom object creation 
 Clear-Host
 $myCustomObject = [PSCustomObject]@{
     FirstName = 'Dave'
-    LastName = 'Goldman'
-    Date = [DateTime]((get-date) -f '%r' -split " ")[0]
-    Time = ((get-date) -f '%r' -split " ")[1]
-    City = 'Charlotte'
-    State = 'North Carolina'
-    Job = 'Engineer'
-    Company = 'Big Software Company'}
+    LastName  = 'Goldman'
+    Date      = [DateTime]((get-date) -f '%r' -split " ")[0]
+    Time      = ((get-date) -f '%r' -split " ")[1]
+    City      = 'Charlotte'
+    State     = 'NC'
+    Job       = 'Sr. CE'
+    Company   = 'Small Software Company'
+}
 
 Clear-Host
 $myCustomObject | Get-Member
 $myCustomObject | Get-Member -Force
 $myCustomObject.pstypenames
 
-#Demo - Ways to exttend object with PSTypeNames
-#Method 1 - Create your [PSCustomObject] with PSTypeName = 'Some Object'
+# Demo - Ways to extend object with PSTypeNames
+#region ExtendTypes
+# Method 1 - Create your [PSCustomObject] with PSTypeName = 'Some Object'
 $myCustomObject1 = [PSCustomObject]@{
-    PSTypeName = 'myCustomObject'
-    Key = 'Value'}
+    PSTypeName = 'myCustomObject1'
+}
+$myCustomObject1.pstypenames
 
 # Method 2 - Add-Member
 $myCustomObject | Add-member -TypeName myCustomObject
 $myCustomObject.pstypenames
 
 # Method 3 - PSTypeNames.Insert
-$myCustomObject.pstypenames.Insert(0, "myCustomObject")
+$myCustomObject3 = [PSCustomObject]@{
+    Key        = 'Value'
+}
+$myCustomObject3.pstypenames.Insert(0, "myCustomObject3")
 
 # NOTE: Add the type: Remove the type: $myCustomobject.pstypenames.Remove('myCustomObject')
-$myCustomObject.pstypenames | Get-Member
-$myCustomObject
-$myCustomObject.pstypenames
+#region ExtendTypes
 
 # Update the property sets to reflect the changes - We will extended the DefaultDisplayProperties
 Clear-Host
-Update-TypeData -TypeName MyCustomObject -DefaultDisplayPropertySet Name, Company -DefaultDisplayProperty Name -DefaultKeyPropertySet CustomProperties -Force
+Update-TypeData -TypeName myCustomObject -DefaultDisplayPropertySet FirstName, Company -DefaultDisplayProperty FirstName -DefaultKeyPropertySet CustomProperties -Force
 $myCustomObject
 $myCustomObject | Get-Member -Force
 
+# The data still exists
 Clear-Host
 "First Name: {0}`nLast Name: {1}`nDate: {2}`nTime: {3}`nCity: {4}`nState: {5}`nJob: {6}`nCompany: {7}" -f $myCustomObject.FirstName,
 $myCustomObject.LastName, $myCustomObject.Date, $myCustomObject.Time, $myCustomObject.City,
 $myCustomObject.State, $myCustomObject.Job, $myCustomObject.Company
-$myCustomObject | Get-Member -MemberType NoteProperty
 
 # Demo - Job format creation
 Notepad 'c:\temp\MyCustomObject.format.ps1xml'
 Update-FormatData -AppendPath 'c:\temp\MyCustomObject.format.ps1xml'
 $myCustomObject
+$myCustomObject | Format-List
+$myCustomObject.PSStandardMembers | Get-Member
+
+#NOTE: Point out the differnce between FT and FL
 
 # Demo: Create a new format.ps1xml
-foreach($job in Get-Job){ $job.GetType() | Select-Object Name, BaseType }
+foreach ($job in Get-Job) { $job.GetType() | Select-Object Name, BaseType }
 Get-TypeData -TypeName *job*
-
 Get-FormatData -TypeName System.Management.Automation.Job | Export-FormatData -Path c:\temp\jobsxml.ps1xml
 Format-XmlDocument -Path C:\temp\jobsxml.ps1xml | clip | Notepad
 
 Clear-Host
 Get-Job
-Get-JobTypes
+Get-JobType
 
 Clear-Host
 Get-PSSession
-Get-Sessions
+Get-SessionType
 $ses0 = Get-PSSession -id 1
 $ses0 | Format-List
-$ses1 = Get-Sessions
+$ses1 = Get-SessionType
 $ses1[0] | Format-List

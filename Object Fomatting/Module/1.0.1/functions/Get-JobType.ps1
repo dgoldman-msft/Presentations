@@ -1,4 +1,4 @@
-﻿function Get-JobTypes {
+﻿function Get-JobType {
 	<#
 		.Synopsis
 			Custom PowerShell Job reporter
@@ -7,7 +7,7 @@
 			This is a wrapper function for Get-Job and Receive-Job with a custom display
 
 		.Example
-			Get-JobTypes | Format-Table
+			Get-JobType | Format-Table
 
 		.Example
 			GJT | Format-Table
@@ -27,23 +27,23 @@
 			foreach ($job in (Get-Job)) {
 				# Store the job so we can display it with a custom display - 16 properties
 				[PSCustomObject]@{
-					PSTypeName        = 'PSUtilities.Jobs'
-					Index             = $index
-					Name              = $job.Name
-					'Job Id'          = $job.id
-					'Job Start Time'  = $job.PSBeginTime
-					'Job End Time'    = $job.PSEndTime
-					'Child Job Id(s)' = $job.ChildJobs
-					'Job Type'        = $job.PSJobTypeName
-					'Job State'       = $job.State
-					'Contains Data'   = $job.HasMoreData
-					Executed          = $job.Location
-					Command           = $job.Command
-					Data              = (Receive-Job -Name $job.Name -Keep)
-					'Status Message'  = $job.StatusMessage
-					'Job Warning'     = $job.Warning
-					'Job Error'       = $job.Error
-    }
+					PSTypeName    = 'PSUtilities.Jobs'
+					Index         = $index
+					Name          = $job.Name
+					JobId         = $job.id
+					JobStartTime  = $job.PSBeginTime
+					JobEndTime    = $job.PSEndTime
+					ChildJobId    = $job.ChildJobs
+					JobType       = $job.PSJobTypeName
+					JobState      = $job.State
+					ContainsData  = $job.HasMoreData
+					Executed      = $job.Location
+					Command       = $job.Command
+					Data          = (Receive-Job -Name $job.Name -Keep)
+					StatusMessage = $job.StatusMessage
+					JobWarning    = $job.Warning
+					JobError      = $job.Error
+    			}
 				$index++
 			}
 		}

@@ -1,4 +1,4 @@
-﻿function Get-Sessions {
+﻿function Get-SessionType {
 	<#
 		.Synopsis
 			Custom PowerShell session reporter
@@ -7,14 +7,14 @@
 			This is a wrapper function for Get-PSSession
 
 		.Example
-			Get-Sessions
+			Get-SessionType
 
 		.Notes
             NOTE: This output uses a custom ps1xml file PowerShellUtilities.Sessions
 	#>
 
 
-	[OutputType('PowershellUtilities.Sessions')]
+	[OutputType('PSUtilities.Sessions')]
 	[Alias('gses')]
 	[CmdletBinding(DefaultParameterSetName = "Default")]
 	param()
@@ -35,12 +35,12 @@
 					PSTypeName                      = 'PSUtilities.Sessions'
 					Id                              = $session.Id
 					Name                            = $Name
-					'ComputerName'                  = $session.ComputerName
+					ComputerName                    = $session.ComputerName
 					Type                            = $session.ComputerType
-					'Session State'                 = $session.State
-					'Versions Supported'            = $SupportedVersions
-					'Server Config'                 = $session.ConfigurationName
-					'Is Availabile'                 = $session.Availability
+					SessionState                    = $session.State
+					VersionsSupported               = $SupportedVersions
+					ServerConfig                    = $session.ConfigurationName
+					IsAvailabile                    = $session.Availability
 					# Connection Information
 					AppName                         = $session.Runspace.ConnectionInfo.AppName
 					ConnectionURI                   = $session.Runspace.ConnectionInfo.ConnectionURI
