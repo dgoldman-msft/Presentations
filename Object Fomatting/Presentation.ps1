@@ -1,6 +1,4 @@
-﻿return
-
-#region Setup
+﻿#region Setup
 3 | Start-connection
 $ExoSes = Get-PSSession
 $ExoSb = { Get-Mailbox }
@@ -16,24 +14,30 @@ $jobs = gjt
 Clear-Host
 #endregion Setup
 
-#region Demo - Object types
+#region - Object types
 # TypeName:	System.Diagnostics.Process
 (Get-Process | Get-Member).count
 (Get-Process | Get-Member -force).count
 (Get-Process | Get-Member -static).count
+
+# Create a new object with Select-Object
 $process = Get-Process | Select-Object -First 1
 
-# Object Hierarchy
+# PowerShell Object Hierarchy
+#endregion Notes
+$process | Get-Member -Force | where-object Name -like "ps*" 
 $process.pstypenames
 
+#Region Notes
 # The magic sauce!!
 # https://devblogs.microsoft.com/powershell/psstandardmembers-the-stealth-property/
-Get-Process | Get-Member -Force | where-object Name -like "ps*" 
+#endregion Demo
 $process.PSStandardMembers.DefaultDisplayPropertySet.ReferencedPropertyNames
 $process
-#endregion Demo
 
-#region FormatEnumerationLimit - List value expansion
+# PowerShell Pipelinging and object control
+# More information 
+ii $PSHome\en-us\about_Preference_Variables.help.txt
 $FormatEnumerationLimit
 $jobs[1].data | Select-Object -First 5 Name, AddressListMembership | Format-Table
 $FormatEnumerationLimit = 15
@@ -47,8 +51,8 @@ Get-ChildItem $PSHome/*format*.ps1xml
 Get-ChildItem $PSHome/*type*.ps1xml
 
 # Demo - file types
-Notepad $PSHome/dotnettypes.format.ps1xml
-Notepad $PSHome/types.ps1xml
+ii $PSHome/dotnettypes.format.ps1xml
+ii $PSHome/types.ps1xml
 
 # Demo - Custom object creation 
 Clear-Host
@@ -84,8 +88,7 @@ $myCustomObject.pstypenames
 $myCustomObject3 = [PSCustomObject]@{
     Key        = 'Value'
 }
-$myCustomObject3.pstypenames.Insert(0, "myCustomObject33")
-
+$myCustomObject3.pstypenames.Insert(0, "myCustomObject3")
 
 # NOTE: Add the type: Remove the type: $myCustomobject.pstypenames.Remove('myCustomObject')
 #region ExtendTypes
@@ -110,7 +113,6 @@ $myCustomObject | Format-List
 $myCustomObject.PSStandardMembers | Get-Member
 
 #NOTE: Point out the differnce between FT and FL
-
 # Demo: Create a new format.ps1xml
 foreach ($job in Get-Job) { $job.GetType() | Select-Object Name, BaseType }
 Get-TypeData -TypeName *job*

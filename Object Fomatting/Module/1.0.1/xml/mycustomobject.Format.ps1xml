@@ -39,13 +39,13 @@
                     <TableRowEntry>
                         <TableColumnItems>
                             <TableColumnItem>
-                                <PropertyName>FirstName</PropertyName>
+                                <PropertyName>First</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>LastName</PropertyName>
+                                <PropertyName>Last</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Date</PropertyName>
+                                <PropertyName>Today's-Date</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Time</PropertyName>
