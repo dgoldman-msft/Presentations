@@ -32,7 +32,7 @@
 	PowerShellVersion = '5.0'
 
 	# Modules that must be imported into the global environment prior to importing this module
-	# RequiredModules = @(@{ ModuleName='PSFramework'; ModuleVersion='1.1.59' })
+	RequiredModules = @(@{ ModuleName='PSFramework'; ModuleVersion='1.5.172' })
 
 	# Assemblies that must be loaded prior to importing this module
 	# RequiredAssemblies = @('bin\PSUtilities.dll')
@@ -48,9 +48,10 @@
 
 	# Functions to export from this module
 	FunctionsToExport = @(
-		'Get-SessionType'
-		'Get-JobTypes'
-		'Get-ModulePath')
+		'Get-SessionWithFormat'
+		'Get-JobWithFormat'
+		'Get-ModulePath'
+		'Format-XmlDocument')
 
 	# Cmdlets to export from this module
 	CmdletsToExport   = ''
@@ -60,8 +61,9 @@
 
 	# Aliases to export from this module
 	AliasesToExport   = @(
-		'gmp'
-		'gjt')
+		'getmp'
+		'getjwf'
+		'getswf')
 
 	# List of all files packaged with this module
 	FileList          = @()
