@@ -1,5 +1,7 @@
 ﻿#region Setup
 Import-Module 'C:\GitHub Repository\Presentations\Object Fomatting\Module\1.0.1\PSUtilities.psd1'
+
+# This is used to connect to Exchange online for the demo. This line can be commented out.
 3 | Start-connection
 $ExoSes = Get-PSSession
 $ExoSb = { Get-Mailbox }
