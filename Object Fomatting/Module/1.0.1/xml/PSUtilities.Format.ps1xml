@@ -59,7 +59,7 @@ else{${ _ }}
                                 <PropertyName>JobID</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>TypeOfJob</PropertyName>
+                                <PropertyName>TypeOfJobs</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>JobState</PropertyName>

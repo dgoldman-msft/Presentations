@@ -21,24 +21,29 @@ Clear-Host
 
 #region Object Types
 # Create a new object with Select-Object
-$process = Get-Process | Select-Object -First 1
+$process = Get-Process | Where-Object {$_.Handles –gt 50} | Sort-Object handles | Select-Object -First 2
+$process
 
 # TypeName:	System.Diagnostics.Process
-Get-Process | Get-Member -Force | Where-Object { ($_.MemberType -eq 'Property') -or ($_.MemberType -eq 'Method') -or ($_.MemberType -eq 'Event') } 
+Clear-Host
+$process[0] | Get-Member -Force |
+Where-Object { ($_.MemberType -eq 'Property') -or ($_.MemberType -eq 'Method') -or ($_.MemberType -eq 'Event') } |
+Group-Object MemberType | Format-Table Name, Count
+
+# In-depth view of the object
+$process | Get-Member
 
 # PowerShell Object Formatting Hierarchy - Both are hidding properties and can be exposed by using the Get-Member with the -Force parameter
+Clear-Host
 $process | Get-Member -Force | Where-Object { ($_.Name -eq 'pstypenames') -or ($_.Name -eq 'PSStandardMembers') }  
 
 # Defines the Object Type
 $process.pstypenames
-$process.PSStandardMembers
 # https://devblogs.microsoft.com/powershell/psstandardmembers-the-stealth-property/
-$process.PSStandardMembers.DefaultDisplayPropertySet
+$process[0].PSStandardMembers.DefaultDisplayPropertySet
 #endregion Object Types
 
-# Demo 1 - Default-Out and formatting - Reference slide deck
-
-#region Demo 2
+#region Demo 1
 # TIP on collection expansion!
 # Invoke-Item $PSHome\en-us\about_Preference_Variables.help.txt
 $FormatEnumerationLimit
@@ -46,12 +51,14 @@ $jobs[1].data | Select-Object -First 5 Name, AddressListMembership | Format-Tabl
 $FormatEnumerationLimit = 15
 $jobs[1].data | Select-Object -First 5 Name, AddressListMembership | Format-Table
 $FormatEnumerationLimit = 4
-#endregion Demo 2
+#endregion Demo 1
+
+# Demo 2 - Default-Out and formatting - Reference slide deck
 
 #region Demo 3 
 # TIP on Select-Object and why not to use it!!!
 $jobs[1].data
-$selectedData = $jobs[1].data | Select-Object | Where-Object Name -eq Dgoldman
+$selectedData = $jobs[1].data | Select-Object | Where-Object Name -eq blocked
 $selectedData
 # Look what happened!!!
 $selectedData.pstypenames
@@ -108,7 +115,7 @@ $myCustomObject.pstypenames
 $myCustomObject3 = [PSCustomObject]@{
     Name = 'Dave'
 }
-$myCustomObject3.pstypenames.Insert(0, "myCustomObject3")
+$myCustomObject3.pstypenames.Insert(1, "myCustomObject3")
 Clear-Host
 $myCustomObject3.pstypenames
 
@@ -117,7 +124,7 @@ $myCustomObject3.pstypenames
 Clear-Host
 $myCustomObject
 $myCustomObject.pstypenames[0]
-Update-TypeData -TypeName myCustomObject -DefaultDisplayPropertySet FirstName, LastName, Company -DefaultDisplayProperty FirstName -DefaultKeyPropertySet CustomProperties -Force
+Update-TypeData -TypeName myCustomObject -DefaultDisplayPropertySet FirstName, LastName -DefaultDisplayProperty FirstName -DefaultKeyPropertySet CustomProperties -Force
 $myCustomObject
 $myCustomObject | Get-Member -Force
 

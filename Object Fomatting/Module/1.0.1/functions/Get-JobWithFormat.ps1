@@ -34,7 +34,7 @@
 					JobStartTime  = $job.PSBeginTime
 					JobEndTime    = $job.PSEndTime
 					ChildJobId    = $job.ChildJobs
-					TypeOfJob     = $job.PSJobTypeName
+					TypeOfJobs     = $job.PSJobTypeName
 					JobState      = $job.State
 					ContainsData  = $job.HasMoreData
 					Executed      = $job.Location
