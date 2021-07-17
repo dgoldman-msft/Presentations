@@ -121,6 +121,7 @@ $myCustomObject3.pstypenames
 
 # NOTE: Add the type: Remove the type: $myCustomobject.pstypenames.Remove('myCustomObject')
 # Update the property sets to reflect the changes - We will extended the DefaultDisplayProperties
+# DefaultDisplayPropertertySet which provides a set of properties that should be displayed if there isn’t a view defined.
 Clear-Host
 $myCustomObject
 $myCustomObject.pstypenames[0]
